@@ -97,7 +97,7 @@ public abstract class HashCode {
    * byte-based hashcode. Otherwise it returns {@link HashCode#asBytes}. Do <i>not</i> mutate this
    * array or else you will break the immutability contract of {@code HashCode}.
    */
-  byte[] getBytesInternal() {
+  public byte[] getBytesInternal() {
     return asBytes();
   }
 
@@ -302,7 +302,7 @@ public abstract class HashCode {
     }
 
     @Override
-    byte[] getBytesInternal() {
+    public byte[] getBytesInternal() {
       return bytes;
     }
 

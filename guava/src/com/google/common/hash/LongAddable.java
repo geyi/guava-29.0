@@ -19,7 +19,7 @@ package com.google.common.hash;
  *
  * @author Louis Wasserman
  */
-interface LongAddable {
+public interface LongAddable {
   void increment();
 
   void add(long x);

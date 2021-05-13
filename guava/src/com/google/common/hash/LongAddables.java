@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  * @author Louis Wasserman
  */
-final class LongAddables {
+public final class LongAddables {
   private static final Supplier<LongAddable> SUPPLIER;
 
   static {
