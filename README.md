@@ -70,6 +70,26 @@ index d2768bc..e5d2ad4 100644
 然后我在我的另一个项目[spring-cloud](https://github.com/geyi/spring-cloud/tree/master/base/src/main/java/com/airing/spring/cloud/base/utils/bloom)
 中基于以上实现了一个简单的布隆过滤器。
 
+如果你也想使用这个布隆过滤器，可以参考如下方式：
+
+1. 将这个项目克隆到本地
+`git clone https://github.com/geyi/guava-29.0.git`
+
+2. 使用maven打包并install到本地仓库
+`mvn install`
+
+3. 在你的项目中引用它
+    ```xml
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>29.1-jre</version>
+    </dependency>
+    ```
+
+4. 参考我的代码
+[redis bloom filter](https://github.com/geyi/spring-cloud/tree/master/base/src/main/java/com/airing/spring/cloud/base/utils/bloom)
+
 # Guava: Google Core Libraries for Java
 
 [![Latest release](https://img.shields.io/github/release/google/guava.svg)](https://github.com/google/guava/releases/latest)
