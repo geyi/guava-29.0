@@ -1,3 +1,75 @@
+# Bloom Filter
+因为Redisson的普通版本不支持在集群模式下使用布隆过滤器，所以我基于Guava中提供的布隆过滤器算法，修改了对比特索引位进行操作的get及set方法，
+将Guava中基于Java的AtomicLongArray的本地存储方式修改为基于Redis的bitmaps的存储方式。
+
+Guava源码的修改很简单，如下：
+```diff
+diff --git a/guava/pom.xml b/guava/pom.xml
+index 7483f57..7df60a0 100644
+--- a/guava/pom.xml
++++ b/guava/pom.xml
+@@ -8,6 +8,7 @@
+     <version>29.0-jre</version>
+   </parent>
+   <artifactId>guava</artifactId>
++  <version>29.1-jre</version>
+   <packaging>bundle</packaging>
+   <name>Guava: Google Core Libraries for Java</name>
+   <description>
+diff --git a/guava/src/com/google/common/hash/HashCode.java b/guava/src/com/google/common/hash/HashCode.java
+index b6a5ff8..6f47029 100644
+--- a/guava/src/com/google/common/hash/HashCode.java
++++ b/guava/src/com/google/common/hash/HashCode.java
+@@ -97,7 +97,7 @@ public abstract class HashCode {
+    * byte-based hashcode. Otherwise it returns {@link HashCode#asBytes}. Do <i>not</i> mutate this
+    * array or else you will break the immutability contract of {@code HashCode}.
+    */
+-  byte[] getBytesInternal() {
++  public byte[] getBytesInternal() {
+     return asBytes();
+   }
+ 
+@@ -302,7 +302,7 @@ public abstract class HashCode {
+     }
+ 
+     @Override
+-    byte[] getBytesInternal() {
++    public byte[] getBytesInternal() {
+       return bytes;
+     }
+ 
+diff --git a/guava/src/com/google/common/hash/LongAddable.java b/guava/src/com/google/common/hash/LongAddable.java
+index a95eece..a034d2f 100644
+--- a/guava/src/com/google/common/hash/LongAddable.java
++++ b/guava/src/com/google/common/hash/LongAddable.java
+@@ -19,7 +19,7 @@ package com.google.common.hash;
+  *
+  * @author Louis Wasserman
+  */
+-interface LongAddable {
++public interface LongAddable {
+   void increment();
+ 
+   void add(long x);
+diff --git a/guava/src/com/google/common/hash/LongAddables.java b/guava/src/com/google/common/hash/LongAddables.java
+index d2768bc..e5d2ad4 100644
+--- a/guava/src/com/google/common/hash/LongAddables.java
++++ b/guava/src/com/google/common/hash/LongAddables.java
+@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
+  *
+  * @author Louis Wasserman
+  */
+-final class LongAddables {
++public final class LongAddables {
+   private static final Supplier<LongAddable> SUPPLIER;
+ 
+   static {
+
+```
+
+然后我在我的另一个项目[spring-cloud](https://github.com/geyi/spring-cloud/tree/master/base/src/main/java/com/airing/spring/cloud/base/utils/bloom)
+中基于以上实现了一个简单的布隆过滤器。
+
 # Guava: Google Core Libraries for Java
 
 [![Latest release](https://img.shields.io/github/release/google/guava.svg)](https://github.com/google/guava/releases/latest)
